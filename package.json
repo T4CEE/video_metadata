@@ -6,7 +6,10 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "prisma:migrate": "cd prisma && dotenv -e ../../.env bun prisma migrate dev",
+    "prisma:reset": "dotenv -e .env npx prisma migrate reset --schema packages/prisma/schema.prisma",
+    "prisma:pull": "cd packages/prisma && dotenv -e ../../.env bun prisma db pull"
   },
   "dependencies": {
     "@prisma/client": "^6.16.2",
