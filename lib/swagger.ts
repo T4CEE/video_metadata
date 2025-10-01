@@ -8,7 +8,7 @@ export const swaggerSpec: OpenAPIV3.Document = {
     description: 'RESTful API for managing video metadata with authentication and caching',
     contact: {
       name: 'API Support',
-      email: 'cyriliniekong@gmail.com',
+      email: 'support@videoapimanagement.com',
     },
   },
   servers: [
@@ -110,6 +110,155 @@ export const swaggerSpec: OpenAPIV3.Document = {
           },
           '401': {
             description: 'Invalid credentials',
+          },
+        },
+      },
+    },
+    '/videos': {
+      get: {
+        tags: ['Videos'],
+        summary: 'Get all videos with filtering',
+        security: [{ BearerAuth: [] }, { ApiKeyAuth: [] }],
+        parameters: [
+          {
+            name: 'genre',
+            in: 'query',
+            schema: { type: 'string' },
+          },
+          {
+            name: 'tags',
+            in: 'query',
+            schema: { type: 'string' },
+            description: 'Comma-separated tags',
+          },
+          {
+            name: 'search',
+            in: 'query',
+            schema: { type: 'string' },
+          },
+          {
+            name: 'page',
+            in: 'query',
+            schema: { type: 'integer', default: 1 },
+          },
+          {
+            name: 'limit',
+            in: 'query',
+            schema: { type: 'integer', default: 10 },
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'Paginated list of videos',
+          },
+          '401': {
+            description: 'Unauthorized',
+          },
+        },
+      },
+      post: {
+        tags: ['Videos'],
+        summary: 'Create a new video',
+        security: [{ BearerAuth: [] }, { ApiKeyAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  title: { type: 'string' },
+                  description: { type: 'string' },
+                  duration: { type: 'number' },
+                  genre: { type: 'string' },
+                  tags: { type: 'array', items: { type: 'string' } },
+                  thumbnailUrl: { type: 'string' },
+                  videoUrl: { type: 'string' },
+                },
+                required: ['title', 'duration', 'genre', 'tags'],
+              },
+            },
+          },
+        },
+        responses: {
+          '201': {
+            description: 'Video created successfully',
+          },
+        },
+      },
+    },
+    '/videos/{id}': {
+      get: {
+        tags: ['Videos'],
+        summary: 'Get video by ID',
+        security: [{ BearerAuth: [] }, { ApiKeyAuth: [] }],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'Video details',
+          },
+          '404': {
+            description: 'Video not found',
+          },
+        },
+      },
+      put: {
+        tags: ['Videos'],
+        summary: 'Update video',
+        security: [{ BearerAuth: [] }, { ApiKeyAuth: [] }],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  title: { type: 'string' },
+                  description: { type: 'string' },
+                  duration: { type: 'number' },
+                  genre: { type: 'string' },
+                  tags: { type: 'array', items: { type: 'string' } },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          '200': {
+            description: 'Video updated successfully',
+          },
+        },
+      },
+      delete: {
+        tags: ['Videos'],
+        summary: 'Delete video',
+        security: [{ BearerAuth: [] }, { ApiKeyAuth: [] }],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          '200': {
+            description: 'Video deleted successfully',
           },
         },
       },
