@@ -12,7 +12,7 @@ export const redis = globalForRedis.ioredis ?? new Redis(process.env.REDIS_URL |
     },
 });
 
-if (process.env.NODE.ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
     globalForRedis.ioredis = redis
 }
 
